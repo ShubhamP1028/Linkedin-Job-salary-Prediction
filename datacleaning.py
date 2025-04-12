@@ -12,9 +12,9 @@ Original file is located at
 import pandas as pd
 import numpy as np
 
-df1=pd.read_csv(r"C:\Users\Shubham\DS&ML\CSM 354 Machine learning\linkedin(1).csv")
+df1 = pd.read_csv('linkedin(1).csv', on_bad_lines='skip')
 
-df1['companyName'].fillna('Unknown')
+df1['companyName']=df1['companyName'].fillna('Unknown')
 
 df1['companyId'].isnull().sum()
 
@@ -23,11 +23,18 @@ df1['companyId'] = df1['companyId'].fillna('1')
 df1['companyId'] = df1['companyId'].astype(int)
 
 # Calculate the average salary by taking the mean of 'salary' and 'salary1' columns
-df1['avg_sal'] = df1[['salary', 'salary1']].mean(axis=1)
+df1['avgsal'] = df1[['salary', 'salary1']].mean(axis=1)
 
 # print(df1['avg_sal'].nunique())
 
-df1['avgsal'] = df1['avg_sal'].fillna(df1['avg_sal'].mean())
+# Calculate mean salary per location
+location_mean_salaries = df1.groupby('location')['avgsal'].mean()
+
+# Fill NaN values in avgsal using location-wise means
+df1['avgsal'] = df1.apply(
+    lambda row: location_mean_salaries[row['location']] if pd.isna(row['avgsal']) else row['avgsal'],
+    axis=1
+)
 
 # df1['salary'] = df1['salary'].astype(int)
 # df1['salary1'] = df1['salary1'].astype(int)
@@ -38,6 +45,9 @@ plt.ylabel("avgsal")
 plt.show()
 
 df1.columns
+
+# Fill any remaining NaNs with overall mean as a fallback
+df1['avgsal'].fillna(df1['avgsal'].mean(), inplace=True)
 
 df1.isnull().sum()
 
@@ -63,8 +73,18 @@ df1['workType']=df1['workType'].fillna(df1['workType'].mode()[0])
 
 df1.to_csv('linkedinFinal.csv', index=False)
 
+import os
+from google.colab import files
+
+# Example: Save your DataFrame to a CSV file
+filename = "finalDataset.csv"
+df1.to_csv(filename, index=False)
+
+# Download the file to your local machine
+files.download(filename)
+
 import pandas as pd
-df=pd.read_csv('linkedinFinal.csv')
+df=pd.read_csv('finalDataset.csv')
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -87,5 +107,38 @@ axs[1].set_title('After Removing Outliers')
 plt.tight_layout()
 plt.show()
 
-dfclean.to_csv('CleanData.csv', index=False)
+# Calculate Q1 (25th percentile) and Q3 (75th percentile)
+Q1 = dfclean['avgsal'].quantile(0.25)
+Q3 = dfclean['avgsal'].quantile(0.75)
+IQR = Q3 - Q1
+
+# Define bounds for outlier detection
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Filter the DataFrame to remove outliers
+df_no_outliers = dfclean[(dfclean['avgsal'] >= lower_bound) & (dfclean['avgsal'] <= upper_bound)]
+
+fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+
+sns.boxplot(data=dfclean, y='avgsal', ax=axs[0])
+axs[0].set_title('Before Removing Outliers')
+
+sns.boxplot(data=df_no_outliers, y='avgsal', ax=axs[1])
+axs[1].set_title('After Removing Outliers')
+
+plt.tight_layout()
+plt.show()
+
+df_no_outliers.to_csv('CleanData.csv', index=False)
+
+import os
+from google.colab import files
+
+# Example: Save your DataFrame to a CSV file
+filename = "final.csv"
+df_no_outliers.to_csv(filename, index=False)
+
+# Download the file to your local machine
+files.download(filename)
 
