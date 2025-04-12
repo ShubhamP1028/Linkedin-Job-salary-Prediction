@@ -40,14 +40,14 @@ df = process_dataframe(raw_df)
 
 salary_bins = [0, 50000, 100000, np.inf]
 salary_labels = ['low', 'medium', 'high']
-df['salary_class'] = pd.cut(df['avg_salary'], bins=salary_bins, labels=salary_labels)
+df['salary_class'] = pd.cut(df['avgsal'], bins=salary_bins, labels=salary_labels)
 
 features = ['top_skill', 'experienceLevel', 'location', 'contractType']
 target = 'salary_class'
 
 df_model = df[features + [target]].dropna()
 
-ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
+ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
 X_encoded = ohe.fit_transform(df_model[features])
 y = df_model[target]
 
@@ -81,7 +81,6 @@ plt.ylabel("Actual")
 plt.title("Confusion Matrix Heatmap")
 plt.tight_layout()
 plt.show()
-
 
 
 mse = mean_squared_error(y_test.cat.codes, y_pred.astype('category').codes)
