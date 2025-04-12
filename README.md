@@ -72,15 +72,16 @@ LinkedIn job listings often lack standardized salary information. This project p
 
 ## 📈 Model Performance
 
-| Metric     | Score        |
-|------------|--------------|
-| Accuracy   | 65.35%      |
-| Precision  | 75.35%      |
-| Recall     | 43.98%      |
-| F1-Score   | *(calculated in code)* |
-| MSE        | *(calculated in code)* |
+| Metric     | Score      |
+|------------|------------|
+| Accuracy   | 98.1%      |
+| Precision  | 96.4%      |
+| Recall     | 94.1%      |
+| F1-Score   | 1.6        |
+| MSE        | 1.13       |
 
 > Confusion matrix and classification report plots included in `/visuals`
+![image](https://github.com/user-attachments/assets/bae9ae18-ae58-4d71-96a2-3edaf5442d71)
 
 ---
 
