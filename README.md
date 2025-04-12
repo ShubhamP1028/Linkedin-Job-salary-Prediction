@@ -83,6 +83,10 @@ LinkedIn job listings often lack standardized salary information. This project p
 > Confusion matrix and classification report plots included in `/visuals`
 ![image](https://github.com/user-attachments/assets/bae9ae18-ae58-4d71-96a2-3edaf5442d71)
 
+> Actual vs Prediction `/visuals`
+![image](https://github.com/user-attachments/assets/67283d38-cb33-4d52-aa99-de05988a05a7)
+
+
 ---
 
 ## 🙋‍♂️ Author
