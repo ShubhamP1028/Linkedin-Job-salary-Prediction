@@ -77,7 +77,7 @@ LinkedIn job listings often lack standardized salary information. This project p
 | Accuracy   | 98.1%      |
 | Precision  | 96.4%      |
 | Recall     | 94.1%      |
-| F1-Score   | 1.6        |
+| F1-Score   | 0.96       |
 | MSE        | 1.13       |
 
 > Confusion matrix and classification report plots included in `/visuals`
